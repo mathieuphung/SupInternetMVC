@@ -1,0 +1,6 @@
+doctrine:
+  host: localhost
+  database: transversalproject
+  username: root
+  pasword:
+  driver: pdo_mysql
