@@ -24,9 +24,24 @@ class UserController {
      */
     public function listUserAction($request) {
         //Use Doctrine DBAL here
-
-        $users = ...
-
+        /*****/
+        $config = new \Doctrine\DBAL\Configuration();
+        //for this array use config_dev.yml and YamlComponents
+        // http://symfony.com/…/curr…/components/yaml/introduction.html
+        $connectionParams = array(
+            'dbname' => 'transversalproject',
+            'user' => 'root',
+            'password' => '',
+            'host' => 'localhost',
+            'driver' => 'pdo_mysql',
+        );
+        $conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+        // http://docs.doctrine-project.org/…/data-retrieval-and-manip…
+        // it's much better if you use QueryBuilder : http://docs.doctrine-project.org/…/refer…/query-builder.html
+        $statement = $conn->prepare('SELECT * FROM user');
+        $statement->execute();
+        $users = $statement->fetchAll();
+        /******/
         //you can return a Response object
         return [
             'view' => 'WebSite/View/user/listUser.html.php', // should be Twig : 'WebSite/View/user/listUser.html.twig'
@@ -42,9 +57,23 @@ class UserController {
      */
     public function showUserAction($request) {
         //Use Doctrine DBAL here
-
-        $user = ...
-
+        /*****/
+        $config = new \Doctrine\DBAL\Configuration();
+        //for this array use config_dev.yml and YamlComponents
+        // http://symfony.com/…/curr…/components/yaml/introduction.html
+        $connectionParams = array(
+            'dbname' => 'transversalproject',
+            'user' => 'root',
+            'password' => '',
+            'host' => 'localhost',
+            'driver' => 'pdo_mysql',
+        );
+        $conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
+        // http://docs.doctrine-project.org/…/data-retrieval-and-manip…
+        // it's much better if you use QueryBuilder : http://docs.doctrine-project.org/…/refer…/query-builder.html
+        $statement = $conn->prepare('SELECT * FROM user  WHERE login = ?');
+        $statement->execute($request);
+        $users = $statement->fetchAll();
         //you can return a Response object
         return [
             'view' => 'WebSite/View/user/showUser.html.php', // should be Twig : 'WebSite/View/user/listUser.html.twig'
@@ -55,7 +84,7 @@ class UserController {
     /**
      * Add User and redirect on listUser after
      */
-    public function addUser($request) {
+    public function addUserAction($request) {
         //Use Doctrine DBAL here
 
 
@@ -83,7 +112,7 @@ class UserController {
     /**
      * Delete User and redirect on listUser after
      */
-    public function deleteUser($request) {
+    public function deleteUserAction($request) {
         //Use Doctrine DBAL here
 
 
@@ -98,7 +127,7 @@ class UserController {
     /**
      * Log User (Session) , add session in $request first (index.php)
      */
-    public function logUser($request) {
+    public function logUserAction($request) {
         if ($request['request']) { //if POST
             //handle form with DBAL
             //...

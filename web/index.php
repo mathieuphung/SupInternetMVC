@@ -1,4 +1,3 @@
-
 <?php
 /**
  * This is you FrontController, the only point of access to your webapp
@@ -13,19 +12,31 @@ require __DIR__ . '/../vendor/autoload.php';
  *
  *
  */
-$routes = ...;
+
+use Symfony\Component\Yaml\Parser;
+
+$yaml = new Parser();
+
+$routes = $yaml->parse(file_get_contents('../app/config/routing.yml'));
 //ControllerClassName, end name is ...Controller
-$controller_class = ... ;
-//ActionName, end name is ...Action
-$action_name = ...;
-$controller = new $controller_class();
-//$Request can by an object
-$request['request'] = &$_POST;
-$request['query'] = &$_GET;
-//...
-//$response can be an object
-$response = $controller->$action_name($request);
-/**
- * Use Twig !
- */
-require $response['view'];
+if(isset($_GET['p'])) {
+    $currentroute = $routes[$_GET['p']]['controller'];
+    $routes_array = explode(':',$currentroute);
+
+    $controller_class = $routes_array[0];
+    //ActionName, end name is ...Action
+    $action_name = $routes_array[1];
+    $controller = new $controller_class();
+    //$Request can by an object
+    $request['request'] = &$_POST;
+    $request['query'] = &$_GET;
+    //...
+    //$response can be an object
+    $response = $controller->$action_name($request);
+
+    /**
+     * Use Twig !
+     */
+    require $response['view'];
+}
+
