@@ -1,14 +1,14 @@
 user_list:
-  controller: src\WebSite\Controller\UserController:listUserAction
+  controller: \WebSite\Controller\UserController:listUserAction
 
 user_show:
-  controller: src\WebSite\Controller\UserController:showUserAction
+  controller: \WebSite\Controller\UserController:showUserAction
 
 user_add:
-  controller: src\WebSite\Controller\UserController:addUserAction
+  controller: \WebSite\Controller\UserController:addUserAction
 
 user_delete:
-  controller: src\WebSite\Controller\UserController:deleteUserAction
+  controller: \WebSite\Controller\UserController:deleteUserAction
 
 user_log:
-  controller: src\WebSite\Controller\UserController:logUserAction
+  controller: \WebSite\Controller\UserController:logUserAction

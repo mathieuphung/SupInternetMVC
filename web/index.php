@@ -1,8 +1,4 @@
 <?php
-/**
- * This is you FrontController, the only point of access to your webapp
- */
-
 require __DIR__ . '/../vendor/autoload.php';
 
 /**
@@ -21,7 +17,7 @@ $routes = $yaml->parse(file_get_contents('../app/config/routing.yml'));
 //ControllerClassName, end name is ...Controller
 if(isset($_GET['p'])) {
     $currentroute = $routes[$_GET['p']]['controller'];
-    $routes_array = explode(':',$currentroute);
+    $routes_array = explode(':', $currentroute);
 
     $controller_class = $routes_array[0];
     //ActionName, end name is ...Action
@@ -37,6 +33,6 @@ if(isset($_GET['p'])) {
     /**
      * Use Twig !
      */
-    require $response['view'];
+    //require $response['view'];
 }
 

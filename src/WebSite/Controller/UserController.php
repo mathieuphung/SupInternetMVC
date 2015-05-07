@@ -15,30 +15,18 @@ namespace Website\Controller;
  *
  * @package Website\Controller
  */
-class UserController {
+class UserController extends AbstractBaseController{
+    public $conn;
 
+    public function __construct() {
+    }
     /**
      * Recup all users and print it
      *
      * @return array
      */
-    public function listUserAction($request) {
-        //Use Doctrine DBAL here
-        /*****/
-        $config = new \Doctrine\DBAL\Configuration();
-        //for this array use config_dev.yml and YamlComponents
-        // http://symfony.com/…/curr…/components/yaml/introduction.html
-        $connectionParams = array(
-            'dbname' => 'transversalproject',
-            'user' => 'root',
-            'password' => '',
-            'host' => 'localhost',
-            'driver' => 'pdo_mysql',
-        );
-        $conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
-        // http://docs.doctrine-project.org/…/data-retrieval-and-manip…
-        // it's much better if you use QueryBuilder : http://docs.doctrine-project.org/…/refer…/query-builder.html
-        $statement = $conn->prepare('SELECT * FROM user');
+    public function listUserAction(){
+        $statement = $this->conn->prepare('SELECT * FROM users');
         $statement->execute();
         $users = $statement->fetchAll();
         /******/
@@ -56,24 +44,9 @@ class UserController {
      * @return array
      */
     public function showUserAction($request) {
-        //Use Doctrine DBAL here
-        /*****/
-        $config = new \Doctrine\DBAL\Configuration();
-        //for this array use config_dev.yml and YamlComponents
-        // http://symfony.com/…/curr…/components/yaml/introduction.html
-        $connectionParams = array(
-            'dbname' => 'transversalproject',
-            'user' => 'root',
-            'password' => '',
-            'host' => 'localhost',
-            'driver' => 'pdo_mysql',
-        );
-        $conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
-        // http://docs.doctrine-project.org/…/data-retrieval-and-manip…
-        // it's much better if you use QueryBuilder : http://docs.doctrine-project.org/…/refer…/query-builder.html
-        $statement = $conn->prepare('SELECT * FROM user  WHERE login = ?');
+        $statement = $this->conn->prepare('SELECT * FROM users  WHERE login = ?');
         $statement->execute($request);
-        $users = $statement->fetchAll();
+        $user = $statement->fetchAll();
         //you can return a Response object
         return [
             'view' => 'WebSite/View/user/showUser.html.php', // should be Twig : 'WebSite/View/user/listUser.html.twig'
@@ -85,13 +58,9 @@ class UserController {
      * Add User and redirect on listUser after
      */
     public function addUserAction($request) {
-        //Use Doctrine DBAL here
-
-
-        if ($request['request']) { //if POST
-            //handle form with DBAL
-            //...
-
+        if ($request['request']) {
+            $statement = $this->conn->prepare('INSERT INTO users(firstname, lastname, number, adress, email, login, password) VALUES (?,?,?,?,?,?,?)');
+            $statement->execute($request);
             //Redirect to show
             //you should return a RedirectResponse object
             return [
@@ -99,8 +68,6 @@ class UserController {
 
             ];
         }
-
-
         //you should return a Response object
         return [
             'view' => 'WebSite/View/user/addUser.html.php',// => create the file
