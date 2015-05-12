@@ -30,9 +30,14 @@ if(isset($_GET['p'])) {
     //$response can be an object
     $response = $controller->$action_name($request);
 
+    if($response['redirect_to']) {
+        header("location: " . $response['redirect_to']);
+        exit;
+    }
+
     /**
      * Use Twig !
      */
-    //require $response['view'];
+    require __DIR__.'/../src/'.$response['view'];
 }
 
